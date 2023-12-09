@@ -45,8 +45,7 @@ export function Header (props: IHeaderProps) {
               my: 1
             }}>
               <Typography sx={{
-                fontWeight: 600,
-                fontSize: 15,
+                fontSize: 18,
                 flexGrow: 1
               }}>
                 <AcUnit sx={{
