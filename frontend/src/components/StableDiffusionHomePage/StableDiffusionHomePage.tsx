@@ -1,20 +1,58 @@
-import React from 'react';
-import './styles.css';
+import * as React from 'react';
 
-const StableDiffusionHomepage = () => {
+import { Container, Box, Toolbar, TextField, IconButton, Paper, Typography } from '@mui/material';
+import { Search, AutoAwesome } from '@mui/icons-material';
+
+export const StableDiffusionHomePage = () => {
   return (
-    <div className="stable-diffusion-homepage">
-      <header>
-        <img src="https://i.imgur.com/1234567.png" alt="Clipdrop by stability.ai" />
-        <h1>STABLE DIFFUSION XL</h1>
-        <h2>SDXL 1.0: A Leap Forward in Al Image Generation</h2>
-      </header>
-      <main>
-        <input type="text" placeholder="Enter your prompt" />
-        <button type="button">Generate</button>
-      </main>
-    </div>
+    <Box 
+      component='main' sx={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column'
+      }}>
+        <Toolbar />
+        <Container sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignContent: 'center',
+          alignItems: 'center',
+          flexGrow: 1
+        }}>
+          <Paper sx={{
+            p: 2
+          }}
+          elevation={4}>
+            <Box textAlign={'center'}>
+              <AutoAwesome />
+              <Typography variant='h2' >
+                Stable AVAXL
+              </Typography>
+              <Typography variant='subtitle1' color='text.secondary' sx={{
+                paddingBlockEnd: 3
+              }}>
+                Generate your own NFT images
+              </Typography>
+            </Box>
+            <TextField
+              id="prompt-input"
+              value=""
+              variant='outlined'
+              sx={{
+                width: 600
+              }}
+              InputProps={{
+                endAdornment: <IconButton edge="end" color="primary" sx={{
+                  // p: 1
+                }}>
+                <Search />
+              </IconButton>
+              }}>
+            </TextField>
+          </Paper>
+        </Container>
+    </Box>
   );
 };
 
-export default StableDiffusionHomepage;
+export default StableDiffusionHomePage;
