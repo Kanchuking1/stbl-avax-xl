@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { AppBar, Typography, Container, Button, Toolbar, useScrollTrigger } from '@mui/material';
 import { AcUnit } from '@mui/icons-material';
+import { Connect } from '../ConnectMetamask';
 
 export interface IHeaderProps {
 }
@@ -55,7 +56,7 @@ export function Header (props: IHeaderProps) {
                 }}></AcUnit>
                 Stable AVAXL
               </Typography>
-              <Button sx={{
+              {/* <Button sx={{
                 fontWeight: 600,
                 fontSize: 15,
                 borderRadius: '10px',
@@ -63,7 +64,8 @@ export function Header (props: IHeaderProps) {
                 }}
                 variant='contained'>
                 Connect Wallet
-              </Button>
+              </Button> */}
+              <Connect />
             </Container>
           </Toolbar>
       </AppBar>

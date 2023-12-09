@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Container, Box, Toolbar, TextField, IconButton, Paper, Typography, LinearProgress } from '@mui/material';
-import { Search, AutoAwesome, AutoFixHigh } from '@mui/icons-material';
+import { Container, Box, Toolbar, TextField, IconButton, Paper, Typography, LinearProgress, Tooltip } from '@mui/material';
+import { Clear, AutoAwesome, AutoFixHigh, AddModerator } from '@mui/icons-material';
 
 export const StableDiffusionHomePage = () => {
   const [prompt, setPrompt] = useState<string>();
@@ -13,18 +13,21 @@ export const StableDiffusionHomePage = () => {
   }
 
   const SubmitButton = () => {
-    return <IconButton 
-      edge="end" color="primary" 
-      disabled={prompt?.length !== undefined && prompt?.length < 5 || prompt?.length === undefined || isGenerating}
-      onClickCapture={() => {
-        setIsGenerating(true);
-        setTimeout(() => {
-          setIsGenerating(false);
-          setHasGenerated(true);
-        }, 3000);
-      }}>
-      <AutoFixHigh />
-    </IconButton>
+    return <Tooltip title="Generate Image">
+      <IconButton 
+        edge="end" color="primary" 
+        disabled={prompt?.length !== undefined && prompt?.length < 5 || prompt?.length === undefined || isGenerating}
+        onClickCapture={() => {
+          setIsGenerating(true);
+          setTimeout(() => {
+            setIsGenerating(false);
+            setHasGenerated(true);
+          }, 3000);
+        }}>
+        <AutoFixHigh />
+      </IconButton>
+    </Tooltip>
+      
   }
 
   const RenderInputBar = () => {
@@ -33,8 +36,10 @@ export const StableDiffusionHomePage = () => {
       value={prompt}
       variant='outlined'
       onChange={handleInput}
+      autoComplete={'one-time-code'}
       sx={{
-        width: 600
+        width: 600,
+        borderRadius: '5px'
       }}
       label='What Image do you want to generate?'
       placeholder='Minimum 5 characters'
@@ -43,6 +48,32 @@ export const StableDiffusionHomePage = () => {
       }}
       disabled={isGenerating}>
     </TextField>;
+  }
+
+  const RenderGeneratedimage = () => {
+    return <Box sx={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+      <Paper elevation={4} sx={{
+        p: 1
+      }}>
+        <img src='https://images.unsplash.com/photo-1551963831-b3b1ca40c98e' height={500} width={450}></img>
+        <Box pt={1} sx={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
+          <Tooltip title="Lock In NFT">
+            <IconButton sx={{
+              mx: 1
+            }}>
+              <AddModerator />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Clear Generation">
+            <IconButton sx={{
+              mx: 1
+            }}>
+              <Clear />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      </Paper>
+    </Box>
   }
 
   return (
@@ -61,7 +92,8 @@ export const StableDiffusionHomePage = () => {
           flexGrow: 1
         }}>
           <Paper sx={{
-            p: 2
+            p: 2,
+            borderRadius: '10px'
           }}
           elevation={4}>
             <Box textAlign={'center'}>
@@ -86,13 +118,7 @@ export const StableDiffusionHomePage = () => {
               {isGenerating && <LinearProgress sx={{
                 borderRadius: '2px'
               }} />}
-              {hasGenerated && <Box sx={{alignItems: 'center', justifyContent: 'center', display: 'flex'}}>
-                  <Paper elevation={4} sx={{
-                  p: 1
-                }}>
-                  <img src='https://images.unsplash.com/photo-1551963831-b3b1ca40c98e' height={500} width={450}></img>
-                </Paper>
-                </Box>}
+              {hasGenerated && RenderGeneratedimage()}
             </Box>
           </Paper>
         </Container>
