@@ -112,7 +112,7 @@ app.get("/generate", async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.json({ err: err });
+    // res.json({ err: err });
   }
 });
 
