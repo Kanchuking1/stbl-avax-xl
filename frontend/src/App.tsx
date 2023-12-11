@@ -39,13 +39,13 @@ function App() {
 
   return (
     <div className='app-container'>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <WagmiConfig config={config}>
-          <Header />
-          <StableDiffusionHomePage />
-        </WagmiConfig>
-      </ThemeProvider>
+      <WagmiConfig config={config}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+            <Header />
+            <StableDiffusionHomePage />
+        </ThemeProvider>
+      </WagmiConfig>
     </div>
   );
 }
