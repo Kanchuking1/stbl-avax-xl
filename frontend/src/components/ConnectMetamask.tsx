@@ -1,28 +1,36 @@
-import { useAccount, useConnect, useContractRead } from 'wagmi';
+import { useAccount, useConnect, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
 import type { Address } from 'wagmi';
 
 import {Button} from '@mui/material'
 import { contractConfig } from './contract';
 
 import { useIsMounted } from '../hooks';
+import React from 'react';
 
-const GetAlive = () => {
-    const { data, isRefetching, isSuccess, refetch } = useContractRead({
+const GenerateImage = () => {
+    const { config } = usePrepareContractWrite({
         ...contractConfig,
-        functionName: 'getAlive',
+        functionName: 'generateImage',
+        args: ['A proper English breakfast']
+        // gas: 1n,
+        // value: 10000000000000000n
+    })
+    const { data, write } = useContractWrite(config)
+    
+    const { isLoading, isSuccess } = useWaitForTransaction({
+        hash: data?.hash,
     })
 
     return (
         <div>
-        Is wagmigotchi alive?: {isSuccess && <span>{data ? 'yes' : 'no'}</span>}
-        <button
-            disabled={isRefetching}
-            onClick={() => refetch()}
-            style={{ marginLeft: 4 }}
-            type='button'
-        >
-            {isRefetching ? 'loading...' : 'refetch'}
-        </button>
+            <Button disabled={isLoading || !write} onClick={() => write && write()}>
+                Generate Image
+            </Button>
+            {isSuccess && (
+                <div>
+                Successfully generated image!
+                </div>
+            )}
         </div>
     )
 }
@@ -32,21 +40,24 @@ export const Connect = () => {
     const { connector, isReconnecting, address } = useAccount()
     const { connect, connectors, isLoading, error, pendingConnector } =
         useConnect({
-            chainId: 43114
+            chainId: 43113
         });
 
     if (address) {
-        return <Button 
-            variant='contained'
-            sx={{
-                fontWeight: 600,
-                fontSize: 15,
-                borderRadius: '10px',
-                textTransform: 'none'
-            }}
-            disabled>
-                {address}
-        </Button>
+        return <React.Fragment>    
+            <Button 
+                variant='contained'
+                sx={{
+                    fontWeight: 600,
+                    fontSize: 15,
+                    borderRadius: '10px',
+                    textTransform: 'none'
+                }}
+                disabled>
+                    {address}
+            </Button>
+            <GenerateImage />
+        </React.Fragment>
     }
 
     return (
@@ -63,7 +74,7 @@ export const Connect = () => {
                     borderRadius: '10px',
                     textTransform: 'none'
                     }}
-                onClick={() => connect({ connector: x })}
+                onClick={() => connect({ chainId: 43113, connector: x })}
             >
                 Connect {x.id === 'injected' ? (isMounted ? x.name : x.id) : x.name}
                 {isMounted && !x.ready && ' (unsupported)'}
