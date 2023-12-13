@@ -1,5 +1,4 @@
 import { useAccount, useConnect, useContractWrite, usePrepareContractWrite, useWaitForTransaction } from 'wagmi';
-import type { Address } from 'wagmi';
 
 import {Button} from '@mui/material'
 import { contractConfig } from './contract';
@@ -11,15 +10,14 @@ const GenerateImage = () => {
     const { config } = usePrepareContractWrite({
         ...contractConfig,
         functionName: 'generateImage',
-        args: ['A proper English breakfast']
-        // gas: 1n,
-        // value: 10000000000000000n
+        args: ['A proper English breakfast'],
+        value: 10000000000000000n
     })
-    const { data, write } = useContractWrite(config)
+    const { data, write } = useContractWrite(config);
     
     const { isLoading, isSuccess } = useWaitForTransaction({
         hash: data?.hash,
-    })
+    });
 
     return (
         <div>
@@ -40,8 +38,12 @@ export const Connect = () => {
     const { connector, isReconnecting, address } = useAccount()
     const { connect, connectors, isLoading, error, pendingConnector } =
         useConnect({
-            chainId: 43113
+            chainId: 43112
         });
+
+    if (error) {
+        console.log(error);
+    }
 
     if (address) {
         return <React.Fragment>    
@@ -74,7 +76,7 @@ export const Connect = () => {
                     borderRadius: '10px',
                     textTransform: 'none'
                     }}
-                onClick={() => connect({ chainId: 43113, connector: x })}
+                onClick={() => connect({ chainId: 43112, connector: x })}
             >
                 Connect {x.id === 'injected' ? (isMounted ? x.name : x.id) : x.name}
                 {isMounted && !x.ready && ' (unsupported)'}
